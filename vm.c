@@ -8,6 +8,31 @@
 " term   : <factor> (('*'|'/'|'%') <factor>)*;     \n" \
 " lexp   : <term> (('+'|'-') <term>)*;             \n"
 
+#define is_a(t, a) (strstr(t->tag, a) != NULL)
+
+int eval(mpc_ast_t* t) {
+  if (is_a(t, "number")) {
+    return atoi(t -> contents);
+  }
+  if (is_a(t, "factor")) {
+    return eval(t -> children[1]);
+  }
+  if (t -> children_num >= 1) {
+    int x = eval(t -> children[0]), i;
+    for (i = 1; i < t -> children_num; i += 2) {
+      char* op = t -> children[i] -> contents;
+      int rhs = eval(t -> children[i+1]);
+      if (strcmp(op, "+") == 0) { x += rhs; }
+      if (strcmp(op, "-") == 0) { x -= rhs; }
+      if (strcmp(op, "*") == 0) { x *= rhs; }
+      if (strcmp(op, "/") == 0) { x /= rhs; }
+      if (strcmp(op, "%") == 0) { x %= rhs; }
+    }
+    return x;
+  }
+  return 0;
+}
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     fprintf(stderr, "usage of %s: expr\n", argv[0]);
@@ -32,7 +57,8 @@ int main(int argc, char **argv) {
     goto leave;
   }
 
-  mpc_ast_print(result.output);
+  //mpc_ast_print(result.output);
+  printf("%d\n", eval(result.output));
   mpc_ast_delete(result.output);
 
 leave:
