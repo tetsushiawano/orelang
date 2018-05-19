@@ -6,7 +6,7 @@
 " factor : '(' <lexp> ')'                          \n" \
 "        | <number>;                               \n" \
 " term   : <factor> (('*'|'/'|'%') <factor>)*;     \n" \
-" lexp   : <term> (('+'|'-'))*;                    \n"
+" lexp   : <term> (('+'|'-') <term>)*;             \n"
 
 int main(int argc, char **argv) {
   if (argc != 2) {
