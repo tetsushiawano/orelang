@@ -4,9 +4,16 @@
 #define STRUCTURE \
 " number : /-?[0-9]+/;                             \n" \
 " factor : '(' <lexp> ')'                          \n" \
-"        | <number>;                               \n" \
+"        | <number>                                \n" \
+"        | <string>                                \n" \
+"        | <ident>;                                \n" \
+" string : /\"[^\"]*\"/;                           \n" \
+" ident  : /[a-zA-Z][a-zA-Z0-9_]/                  \n" \
 " term   : <factor> (('*'|'/'|'%') <factor>)*;     \n" \
-" lexp   : <term> (('+'|'-') <term>)*;             \n"
+" lexp   : <term> (('+'|'-') <term>)*;             \n" \
+" let    : <ident> '=' <lexp> ';';                 \n" \
+" call   : <ident> '(' <lexp>? (, <lexp>)* ')';';  \n" \
+" stmts  : (<let> | <call>)*;                      \n"
 
 #define is_a(t, a) (strstr(t->tag, a) != NULL)
 
