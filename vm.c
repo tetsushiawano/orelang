@@ -14,7 +14,7 @@
 " term   : <factor> (('*' | '/' | '%') <factor>)* ;     \n" \
 " lexp   : <term> (('+' | '-') <term>)*;                \n" \
 " let    : <ident> '=' <lexp> ';' ;                     \n" \
-" call   : <ident> '(' <lexp>? (',' <lexp>)* ')' ';' ;   \n" \
+" call   : <ident> '(' <lexp>? (',' <lexp>)* ')' ';' ;  \n" \
 " stmts  : (<let> | <call>)*;                           \n"
 
 #define is_a(t, a) (strstr(t->tag, a) != NULL)
@@ -153,13 +153,16 @@ int main(int argc, char **argv) {
   gc = kl_init(ident);
 
   if (!mpc_parse_contents(argv[1], Stmts, &result)) {
+    printf("testtest");
     mpc_err_print(result.error);
     mpc_err_delete(result.error);
     goto leave;
   }
 
   mpc_ast_print(result.output);
+
   eval(result.output);
+
   mpc_ast_delete(result.output);
   kl_destroy(ident, gc);
 
